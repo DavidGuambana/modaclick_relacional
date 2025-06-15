@@ -34,4 +34,10 @@ public class PedidoController {
         pedidoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<Pedido>> listarPedidosPorUsuario(@PathVariable("id") Long usuarioId) {
+        List<Pedido> pedidos = pedidoService.findByUsuarioId(usuarioId);
+        return ResponseEntity.ok(pedidos);
+    }
 }

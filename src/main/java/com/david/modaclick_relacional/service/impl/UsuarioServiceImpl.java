@@ -59,7 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtUtil.generateToken(userDetails.getUsername());
 
-        return new LoginResponseDTO(token, user.getNombre() + " " + user.getApellido());
+        return new LoginResponseDTO(token, user.getNombre()+" "+ user.getApellido(),user.getId());
     }
 
 
@@ -80,7 +80,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Usuario usuario = findByUsername(userDetails.getUsername());
 
-        return new LoginResponseDTO(token, usuario.getNombre() + " " + usuario.getApellido());
+        return new LoginResponseDTO(token, usuario.getNombre()+" "+usuario.getApellido(),usuario.getId());
     }
 
     @Override

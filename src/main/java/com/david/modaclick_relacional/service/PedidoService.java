@@ -11,4 +11,5 @@ public interface PedidoService {
     Pedido save(PedidoRequestDTO pedido);
     List<Pedido> findAll();
     void deleteById(Long id);
+    List<Pedido> findByUsuarioId(Long userid);
 }

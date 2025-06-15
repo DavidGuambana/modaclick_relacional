@@ -144,5 +144,8 @@ public class PedidoServiceImpl implements PedidoService {
         // Luego eliminar el pedido
         pedidoRepository.delete(pedido);
     }
-
+    @Override
+    public List<Pedido> findByUsuarioId(Long userid) {
+        return pedidoRepository.findPedidoByUsuario_Id(userid);
+    }
 }
