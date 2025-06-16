@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductoService {
-    Producto save(ProductoRequestDTO producto);
+    Producto save(ProductoRequestDTO producto, String idImg);
     Optional<Producto> findById(Long id);
     List<Producto> findAll();
     void deleteById(Long id);

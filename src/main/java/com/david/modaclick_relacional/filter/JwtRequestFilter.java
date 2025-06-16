@@ -43,50 +43,51 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String path = request.getServletPath();
 
-        logger.info("Request: [{}] {}", method, path);
+        System.out.println("Request: [" + method + "] " + path);
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwt);
-                logger.debug("Username extraído del JWT: {}", username);
+                System.out.println("Username extraído del JWT: " + username);
             } catch (ExpiredJwtException e) {
-                logger.warn("Token expirado: {}", e.getMessage());
+                System.out.println("Token expirado: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\": \"El token ha expirado\"}");
                 return;
             } catch (JwtException e) {
-                logger.warn("Token inválido: {}", e.getMessage());
+                System.out.println("Token inválido: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"error\": \"Token inválido\"}");
                 return;
             }
         } else {
-            logger.debug("No se encontró token Bearer en el encabezado Authorization.");
+            System.out.println("No se encontró token Bearer en el encabezado Authorization.");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwt)) {
-                logger.info("Token válido. Autenticando usuario: {}", username);
+                System.out.println("Token válido. Autenticando usuario: " + username);
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
-                logger.warn("Token inválido para el usuario: {}", username);
+                System.out.println("Token inválido para el usuario: " + username);
             }
         }
 
         chain.doFilter(request, response);
     }
 
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/api/auth") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui");
+        return  path.startsWith("/api/auth")|| path.startsWith("/api/files") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui");
     }
 }

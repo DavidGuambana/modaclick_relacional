@@ -23,7 +23,7 @@ public class ProductoServiceImpl implements ProductoService {
     private final MarcaRepository marcaRepository;
 
     @Override
-    public Producto save(ProductoRequestDTO productoDTO) {
+    public Producto save(ProductoRequestDTO productoDTO, String idImg) {
         // Buscar la categoría y marca, lanzar excepción si no existen
         Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada con id: " + productoDTO.getCategoriaId()));
@@ -39,6 +39,7 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setStock(productoDTO.getStock());
         producto.setCategoria(categoria);
         producto.setMarca(marca);
+        producto.setId_imagen(idImg);
 
         // Guardar y retornar
         return productoRepository.save(producto);
